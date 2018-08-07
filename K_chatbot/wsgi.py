@@ -1,5 +1,5 @@
 """
-WSGI config for koei project.
+WSGI config for K_chatbot project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "koei.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "K_chatbot.settings")
 
 application = get_wsgi_application()
