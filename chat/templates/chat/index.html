@@ -9,10 +9,206 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-    <title>AI Koei</title>
+    <title>KAI</title>
 </head>
 <body>
 <style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  {#background-color: #edeff2;#}
+  font-family: "Calibri", "Roboto", sans-serif;
+}
+
+.chat_window {
+  position: absolute;
+  width: calc(100% - 20px);
+  max-width: 800px;
+  height: 700px;
+  border-radius: 10px;
+  background-color: #fff;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  background-color: #f8f8f8;
+  overflow: hidden;
+}
+
+.top_menu {
+  background-color: #fff;
+  width: 100%;
+  padding: 20px 0 15px;
+  box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
+}
+.top_menu .buttons {
+  margin: 3px 0 0 20px;
+  position: absolute;
+}
+.top_menu .buttons .button {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+  position: relative;
+}
+.top_menu .buttons .button.close {
+  background-color: #f5886e;
+}
+.top_menu .buttons .button.minimize {
+  background-color: #fdbf68;
+}
+.top_menu .buttons .button.maximize {
+  background-color: #a3d063;
+}
+.top_menu .title {
+  text-align: center;
+  color: #bcbdc0;
+  font-size: 20px;
+}
+
+.messages {
+  position: relative;
+  list-style: none;
+  padding: 20px 10px 0 10px;
+  margin: 0;
+  height: 347px;
+  overflow: scroll;
+}
+.messages .message {
+  clear: both;
+  overflow: hidden;
+  margin-bottom: 20px;
+  transition: all 0.5s linear;
+  opacity: 0;
+}
+.messages .message.left .avatar {
+  background-color: #f5886e;
+  float: left;
+}
+.messages .message.left .text_wrapper {
+  background-color: #ffe6cb;
+  margin-left: 20px;
+}
+.messages .message.left .text_wrapper::after, .messages .message.left .text_wrapper::before {
+  right: 100%;
+  border-right-color: #ffe6cb;
+}
+.messages .message.left .text {
+  color: #c48843;
+}
+.messages .message.right .avatar {
+  background-color: #fdbf68;
+  float: right;
+}
+.messages .message.right .text_wrapper {
+  background-color: #c7eafc;
+  margin-right: 20px;
+  float: right;
+}
+.messages .message.right .text_wrapper::after, .messages .message.right .text_wrapper::before {
+  left: 100%;
+  border-left-color: #c7eafc;
+}
+.messages .message.right .text {
+  color: #45829b;
+}
+.messages .message.appeared {
+  opacity: 1;
+}
+.messages .message .avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.messages .message .text_wrapper {
+  display: inline-block;
+  padding: 20px;
+  border-radius: 6px;
+  width: calc(100% - 85px);
+  min-width: 100px;
+  position: relative;
+}
+.messages .message .text_wrapper::after, .messages .message .text_wrapper:before {
+  top: 18px;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.messages .message .text_wrapper::after {
+  border-width: 13px;
+  margin-top: 0px;
+}
+.messages .message .text_wrapper::before {
+  border-width: 15px;
+  margin-top: -2px;
+}
+.messages .message .text_wrapper .text {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.bottom_wrapper {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  padding: 20px 20px;
+  position: absolute;
+  bottom: 0;
+}
+.bottom_wrapper .message_input_wrapper {
+  display: inline-block;
+  height: 50px;
+  border-radius: 25px;
+  border: 1px solid #bcbdc0;
+  width: calc(100% - 160px);
+  position: relative;
+  padding: 0 20px;
+}
+.bottom_wrapper .message_input_wrapper .message_input {
+  border: none;
+  height: 100%;
+  box-sizing: border-box;
+  width: calc(100% - 40px);
+  position: absolute;
+  outline-width: 0;
+  color: gray;
+}
+.bottom_wrapper .send_message {
+  width: 140px;
+  height: 50px;
+  display: inline-block;
+  border-radius: 50px;
+  background-color: #a3d063;
+  border: 2px solid #a3d063;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s linear;
+  text-align: center;
+  float: right;
+}
+.bottom_wrapper .send_message:hover {
+  color: #a3d063;
+  background-color: #fff;
+}
+.bottom_wrapper .send_message .text {
+  font-size: 18px;
+  font-weight: 300;
+  display: inline-block;
+  line-height: 48px;
+}
+
+.message_template {
+  display: none;
+}
+
 .bs-box  div[class^="col"] {
 	border: 1px solid white;
 	background: #f5f5f5;
@@ -21,33 +217,34 @@
 	padding-bottom: 8px;
 	}
 </style>
-<div id="" class="container">
-  <h2>
-    Self evolutionary AI chatbot KOEI
-  </h2>
-</div>
-
-    <div class="container bs-box">
-    <!-- Content here -->
-        <div class="row">
-            <div class="col">
-                <textarea id="chat-log"  rows="20" class="form-control"></textarea>
+    <div class="chat_window">
+        <div class="top_menu">
+            <div class="buttons">
+                <div class="button close"></div>
+                <div class="button minimize"></div>
+                <div class="button maximize"></div>
             </div>
+            <div class="title">K CHAT</div>
         </div>
-
-        <div class="row">
-            <div class="col">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text" id="btnGroupAddon2">@</div>
-                    </div>
-                    <input class="form-control" id="chat-message-input" type="text"/>
-                    <input class="btn btn-primary" id="chat-message-submit" type="button" value="Send"/>
-                </div>
+        <ul class="messages"></ul>
+        <div class="bottom_wrapper clearfix">
+            <div class="message_input_wrapper">
+                <input class="message_input" placeholder="" />
+            </div>
+            <div class="send_message">
+                <div class="icon"></div>
+                <div class="text">SEND</div>
             </div>
         </div>
     </div>
-
+    <div class="message_template">
+        <li class="message">
+            <div class="avatar"></div>
+            <div class="text_wrapper">
+                <div class="text"></div>
+            </div>
+        </li>
+    </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -55,7 +252,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 <script>
-    var roomName = 'koei';
+    var roomName = 'K_chatbot';
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
 
     var chatSocket = new WebSocket(
@@ -64,29 +261,94 @@
 
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
-        var message = data['message'];
-        document.querySelector('#chat-log').value += (message + '\n');
+        sendMessage(data.message, data.side);
+        $('.messages').scrollTop = $('.messages').scrollHeight;
     };
-
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
+    document.querySelector('.message_input').focus();
 
-    document.querySelector('#chat-message-input').focus();
-    document.querySelector('#chat-message-input').onkeyup = function(e) {
-        if (e.keyCode === 13) {  // enter, return
-            document.querySelector('#chat-message-submit').click();
+    function Message(arg) {
+        this.text = arg.text;
+        this.message_side = arg.message_side;
+        this.draw = function (_this) {
+            return function () {
+                var $message;
+                $message = $($('.message_template').clone().html());
+                $message.addClass(_this.message_side).find('.text').html(_this.text);
+                $('.messages').append($message);
+                return setTimeout(function () {
+                    return $message.addClass('appeared');
+                }, 0);
+            };
+        }(this);
+        return this;
+    }
+
+    var message_side = 'right';
+
+    function getMessageText() {
+        var $message_input;
+        $message_input = $('.message_input');
+        return $message_input.val();
+    }
+
+    function sendMessage(text, side) {
+        var $messages, message;
+        if (text.trim() === '') {
+            return;
         }
-    };
+        $('.message_input').val('');
+        if (side=='left') {
+            message_side = 'left';
+        }
+        else {
+            message_side = 'right';
+        }
+        message = new Message({
+            text: text,
+            message_side: message_side
+        });
+        if (message_side == 'left') {
+            setTimeout(function () {
+                message.draw();
+                $('.messages').scrollTop($('.messages').height());
+            }, 1000)
 
-    document.querySelector('#chat-message-submit').onclick = function(e) {
-        var messageInputDom = document.querySelector('#chat-message-input');
-        var message = messageInputDom.value;
+        }
+        else {
+            message.draw();
+            $('.messages').scrollTop($('.messages').height());
+        }
+    }
+
+    $('.send_message').click(function (e) {
         chatSocket.send(JSON.stringify({
-            'message': message
+            'message': getMessageText()
         }));
+    });
 
-        messageInputDom.value = '';
-    };
+    $('.message_input').keyup(function (e) {
+        if (e.which === 13) {
+            chatSocket.send(JSON.stringify({
+            'message': getMessageText()
+            }));
+        }
+    });
+
+    function first_message(text) {
+        var message;
+        if (text.trim() === '') {
+            return;
+        }
+        $('.message_input').val('');
+        message = new Message({
+            text: text,
+            message_side: 'left'
+        });
+            message.draw();
+        }
+    first_message('안녕하세요. 한관희입니다.', 'left');
 </script>
 </html>

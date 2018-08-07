@@ -28,11 +28,13 @@ class ChatConsumer(WebsocketConsumer):
 
         if (len(message) != 0):
             self.send(text_data=json.dumps({
-                'message': '나  : ' + message
+                'message':  message,
+                'side' : 'right'
             }))
             answer = chatbot._do_reply(message)
             self.send(text_data=json.dumps({
-                'message': '코에 : ' + answer
+                'message':  answer,
+                'side': 'left'
             }))
             # saving chat message to database
             c = Chat(question=message, answer=answer, verify=Chat.VERIFY_NOT)
